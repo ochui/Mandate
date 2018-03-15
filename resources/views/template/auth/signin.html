@@ -1,0 +1,10 @@
+{% extends "auth/auth.html" %}
+
+{% block content %}
+    <form action="{{ path_for('auth.signin') }}" method="post">
+        <input type="text" name="email" id="email" value="{{ oldFormInput.email }}" placeholder="E-mail or Voter ID">
+        <input type="text" name="password" id="password" placeholder="Password">
+        <button type="submit">Signin</button>
+    </form>
+    <p><a href="{{ path_for('auth.signup') }}">Signup</a></p>
+{% endblock %}

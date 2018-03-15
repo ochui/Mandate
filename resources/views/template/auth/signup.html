@@ -1,0 +1,11 @@
+{% extends "auth/auth.html" %}
+{% block content %}
+    <form action="{{ path_for('auth.signup') }}" method="post">
+        <input type="text" name="first_name" id="first_name" value="{{ oldFormInput.first_name }}" placeholder="First Name">
+        <input type="text" name="last_name" id="last_name" value="{{ oldFormInput.last_name }}" placeholder="Last Name">
+        <input type="text" name="email" id="email" value="{{ oldFormInput.email }}" placeholder="Email">
+        <input type="text" name="password" id="password" placeholder="Password">
+        <button type="submit">Signup</button>
+    </form>
+    <p><a href="{{ path_for('auth.signin') }}">Signin</a></p>
+{% endblock %}
