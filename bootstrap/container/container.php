@@ -39,3 +39,7 @@ $container['UserInterface'] = function ($container) {
 $container['AuthController'] = function ($container) {
     return new \App\Controllers\Auth\AuthController($container);
 };
+
+$container['Admin'] = function ($container) {
+    return new App\Controllers\Admin\Admin($container);
+};

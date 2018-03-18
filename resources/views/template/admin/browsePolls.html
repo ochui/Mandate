@@ -1,0 +1,22 @@
+{% extends "admin/dashboard.html" %}
+
+{% block content %}
+    <div>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start</th>
+                <th>End</th>
+            </tr>
+            {% for poll in polls %}
+                <tr>
+                    <td>{{ poll.name }}</td>
+                    <td>{{ poll.description }}</td>
+                    <td>{{ poll.starts }}</td>
+                    <td>{{ poll.ends }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

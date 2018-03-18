@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe0b5010f325df0a8777ef175dbc97e6",
+    "content-hash": "435da2fde3e036c53fb72fbfcf7e81de",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1091,6 +1091,48 @@
                 "templating"
             ],
             "time": "2017-09-27T18:10:31+00:00"
+        },
+        {
+            "name": "xandros15/slim-pagination",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xandros15/SlimPagination.git",
+                "reference": "c983fc9b3d2e544465ddae359550cc347f1a71f8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xandros15/SlimPagination/zipball/c983fc9b3d2e544465ddae359550cc347f1a71f8",
+                "reference": "c983fc9b3d2e544465ddae359550cc347f1a71f8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "slim/slim": "^3.0"
+            },
+            "require-dev": {
+                "slim/php-view": "^2.1",
+                "slim/twig-view": "^2.1",
+                "symfony/var-dumper": "^3.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Xandros15\\SlimPagination\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "xandros",
+                    "email": "xandros92@gmail.com"
+                }
+            ],
+            "description": "simple pagination for slim3",
+            "time": "2016-07-12T15:28:55+00:00"
         }
     ],
     "packages-dev": [],

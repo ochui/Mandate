@@ -1,10 +1,16 @@
 {% extends "auth/auth.html" %}
 {% block content %}
+{{ errors | json_encode }}
     <form action="{{ path_for('auth.signup') }}" method="post">
-        <input type="text" name="first_name" id="first_name" value="{{ oldFormInput.first_name }}" placeholder="First Name">
-        <input type="text" name="last_name" id="last_name" value="{{ oldFormInput.last_name }}" placeholder="Last Name">
-        <input type="text" name="email" id="email" value="{{ oldFormInput.email }}" placeholder="Email">
-        <input type="text" name="password" id="password" placeholder="Password">
+        <input type="text" name="email" id="email" value="{{ oldFormInput.email }}" placeholder="Email"><br>
+        <input type="text" name="surname" id="surname" value="{{ oldFormInput.surname }}" placeholder="Surname"><br>
+        <input type="text" name="first_name" id="first_name" value="{{ oldFormInput.first_name }}" placeholder="First Name"><br>
+        <input type="text" name="last_name" id="last_name" value="{{ oldFormInput.last_name }}" placeholder="Last Name"><br>
+        <input type="text" name="nationality" id="nationality" value="{{ oldFormInput.nationality }}" placeholder="Nationality"><br>
+        <input type="text" name="state_of_origin" id="state_of_origin" value="{{ oldFormInput.state_of_origin }}" placeholder="State of origin"><br>
+        <input type="text" name="local_government" id="local_government" value="{{ oldFormInput.local_government }}" placeholder="Local government"><br>
+        <input type="text" name="date_of_birth" id="date_of_birth" value="{{ oldFormInput.date_of_birth }}" placeholder="Date of birth"><br>
+        <input type="text" name="password" id="password" placeholder="Password"><br>
         <button type="submit">Signup</button>
     </form>
     <p><a href="{{ path_for('auth.signin') }}">Signin</a></p>

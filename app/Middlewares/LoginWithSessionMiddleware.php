@@ -13,6 +13,7 @@ class LoginWithSessionMiddleware extends Middleware
         if (isset($_SESSION['userId'])) {
             $this->view->getEnvironment()->addGlobal('auth', [
             'userIsAuthenticated' => Auth::userIsAuthenticated(),
+            'userIsAdmin' => Auth::adminIsAuthenticated(),
             'userData' => Auth::userData()
             ]);
         }

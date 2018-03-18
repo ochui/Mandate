@@ -10,9 +10,18 @@
 
 <body>
     <nav>
-        {% if auth.userIsAuthenticated %} 
-            <li><a href="{{ path_for('auth.signout') }}">Signout</a></li>
-        {% else %}
+        {% if auth.userIsAuthenticated %}
+        <p>
+            welcome {{ auth.userData.first_name }}
+        </p>
+        <li>
+            <a href="{{ path_for('auth.signout') }}">Signout</a>
+        </li>
+        {% if auth.userIsAdmin %}
+        <li>
+            <a href="{{ path_for('admin.home') }}">Manage site</a>
+        </li>
+        {% endif %} {% else %}
         <ul>
             <li>
                 <a href="{{ path_for('auth.signin') }}">Signin</a>

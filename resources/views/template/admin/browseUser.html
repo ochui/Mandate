@@ -1,0 +1,35 @@
+{% extends "admin/dashboard.html" %}
+{% block content %}
+    <div>
+        <table>
+            <tr>
+                <th>Surname</th>
+                <th>First Name</th>
+                <th>State of orign</th>
+                <th>Local government</th>
+                <th>Role</th>
+                <th>Join</th>
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.surname }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.state_of_origin }}</td>
+                    <td>{{ user.local_government }}</td>
+                    <td>
+                        {% if user.role == 0 %}
+                            NULL
+                        {% endif %}
+                        {% if user.role == 1 %}
+                            ADMINISTRATOR
+                        {% endif %}
+                        {% if user.role == 2 %}
+                            MODRATOR
+                        {% endif %}
+                    </td>
+                    <td>{{ user.created_at }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "admin/dashboard.html" %}
+{% block content %}
+    <div>
+        <form action="{{ path_for('admin.create.poll') }}" method="post">
+            <input type="text" name="name" id="name" placeholder="Poll name">
+            <input type="text" name="description" id="description" placeholder="Description">
+            <select name="parent" id="parent" placeholder="parent">
+                <option value="">No parent</option>
+                {% for poll in polls %}
+                    <option value="{{ poll.id }}">{{ poll.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="date" name="start" id="start" placeholder="Start time">
+            <input type="date" name="end" id="ends" placeholder="End time">
+            <button type="submit">Create Poll</button>
+        </form>
+    </div>
+{% endblock %}
