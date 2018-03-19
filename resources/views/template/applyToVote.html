@@ -1,0 +1,25 @@
+{% extends "app.html" %}
+
+{% block content %}
+<div>
+    <h1>Voters Application Console</h1>
+    <p>
+        <p><h3>Terms and Condition</h3></p>
+        i {{ auth.userData.surname }},  {{ auth.userData.first_name }} accept that, 
+        <ul>
+            <ol>I am at least 18 years old</ol>
+            <ol>I am a Citizen of blah blah</ol>
+            <ol>I will respect all electoral rules</ol>
+        </ul>
+    </p>
+    <button type="button" id="apply">Submit Application</button>
+</div>
+<script>
+    $btn = document.getElementById('apply').addEventListener('click', function(){
+        var oReq = new XMLHttpRequest();
+        oReq.open("POST", "/apply/voter");
+        oReq.send();
+    })
+    
+</script>
+{% endblock %}

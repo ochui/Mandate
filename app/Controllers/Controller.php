@@ -7,6 +7,8 @@ class Controller
 
     protected $container;
 
+    protected $timeStamp;
+
 
     public function __get($property)
     {
@@ -17,6 +19,13 @@ class Controller
 
     public function __construct($container)
     {
+        try {
+            $this->timeStamp = new \DateTime();
+        }catch(\Exception $e) {
+            echo $e->getMessage();
+            exit(1);
+        }
+        
         $this->container = $container;
     }
 

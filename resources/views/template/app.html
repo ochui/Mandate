@@ -1,41 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Vote</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vote</title>
+    </head>
 
-<body>
-    <nav>
-        {% if auth.userIsAuthenticated %}
-        <p>
-            welcome {{ auth.userData.first_name }}
-        </p>
-        <li>
-            <a href="{{ path_for('auth.signout') }}">Signout</a>
-        </li>
-        {% if auth.userIsAdmin %}
-        <li>
-            <a href="{{ path_for('admin.home') }}">Manage site</a>
-        </li>
-        {% endif %} {% else %}
-        <ul>
-            <li>
-                <a href="{{ path_for('auth.signin') }}">Signin</a>
-            </li>
-            <li>
-                <a href="{{ path_for('auth.signup') }}">Signup</a>
-            </li>
-        </ul>
-        {% endif %}
+    <body>
+        <nav>
+            {% if auth.userIsAuthenticated %}
+                <p>
+                    welcome
+                    {{ auth.userData.first_name }}
+                </p>
+                <li>
+                    <a href="{{ path_for('user.apply.vote') }}">Apply to vote</a>
+                </li>
+                <li>
+                    <a href="{{ path_for('user.apply.candidate') }}">Apply to be voted</a>
+                </li>
+                <li>
+                    <a href="{{ path_for('auth.signout') }}">Signout</a>
+                </li>
+                {% if auth.userIsAdmin %}
+                    <li>
+                        <a href="{{ path_for('admin.home') }}">Manage site</a>
+                    </li>
+                {% endif %}
+            {% else %}
+                <ul>
+                    <li>
+                        <a href="{{ path_for('auth.signin') }}">Signin</a>
+                    </li>
+                    <li>
+                        <a href="{{ path_for('auth.signup') }}">Signup</a>
+                    </li>
+                </ul>
+            {% endif %}
 
-    </nav>
-    {% block content %}
-    <p>application set up is ok..</p>
-    {% endblock %}
-</body>
+        </nav>
+        {% block content %}
+            <p>application set up is ok..</p>
+        {% endblock %}
+    </body>
 
 </html>

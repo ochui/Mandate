@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Dashboard</title>
-</head>
-<body>
-    <nav>
-        <ul>
-            <li><a href="{{ path_for('admin.view.users') }}">View Users</a></li>
-            <li><a href="{{ path_for('admin.create.poll') }}">Create Election</a></li>
-            <li><a href="{{ path_for('admin.view.poll') }}">View Election</a></li>
-        </ul>
-    </nav>
-    {% block content %}
-    
-    #admin dashboard
-    {% endblock %}
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Dashboard</title>
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ path_for('admin.view.users') }}">View Users</a>
+                </li>
+                <li>
+                    <a href="{{ path_for('admin.create.poll') }}">Create Election</a>
+                </li>
+                <li>
+                    <a href="{{ path_for('admin.view.poll') }}">View Election</a>
+                </li>
+                <li>
+                    <a href="{{ path_for('auth.signout') }}">Sign out</a>
+                </li>
+            </ul>
+        </nav>
+        {% block content %}
+
+            #admin dashboard
+        {% endblock %}
+    </body>
 </html>

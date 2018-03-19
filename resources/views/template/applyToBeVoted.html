@@ -1,0 +1,23 @@
+{% extends "app.html" %}
+
+{% block content %}
+    <div>
+        <h1>Candidate Application Console</h1>
+        {{ error | json_encode }}
+
+        {{ message | json_encode }}
+        <form action="" method="post">
+            <select name="poll" id="poll">
+                {% for poll in data.polls %}
+                    <option value="{{ poll.id }}">{{ poll.name }}</option>
+                {% endfor %}
+            </select>
+            <select name="position" id="position">
+                {% for position in data.positions %}
+                    <option value="{{ position.id }}">{{ position.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Submit Application</button>
+        </form>
+    </div>
+{% endblock %}

@@ -43,3 +43,7 @@ $container['AuthController'] = function ($container) {
 $container['Admin'] = function ($container) {
     return new App\Controllers\Admin\Admin($container);
 };
+
+$container['Application'] = function ($container) {
+    return new App\Controllers\Application($container);
+};

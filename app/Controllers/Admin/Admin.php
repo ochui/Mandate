@@ -84,6 +84,18 @@ class Admin extends Controller
 
     public function browseCandidate($request, $response)
     {
+        $candidates = Candidate::all();
 
+        $pagination = new Pagination($request, $this->router, [
+            Pagination::OPT_TOTAL => count($candidate), #number of items
+            #Pagination::OPT_PARAM_TYPE => PageList::PAGE_ATTRIBUTE
+        ]);
+
+        $param = $pagination->toArray();
+
+        $this->view->getEnvironment()->addGlobal('candidates', Candidate::offset(($param['current_page'] - 1) * $param['per_page'])->limit($param['per_page'])->get());
+        $this->view->getEnvironment()->addGlobal('pagination', $pagination);
+
+        return $this->view->render($response, 'admin/browseUser.html');
     }
 }

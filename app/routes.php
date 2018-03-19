@@ -16,6 +16,11 @@ $app->get('/auth/validate/error', 'UserInterface:validationError')->setName('aut
 $app->get('/auth/validate/success', 'UserInterface:validationSuccess')->setName('auth.validate.success');
 $app->get('/auth/validate[/{activationToken}]', 'AuthController:validateEmail')->setName('auth.validation.email');
 
+$app->get('/apply/voter', 'UserInterface:applyToVote')->setName('user.apply.vote');
+$app->post('/apply/voter', 'Application:VotersApplication');
+$app->get('/apply/candidate', 'UserInterface:applyToBeVoted')->setName('user.apply.candidate');
+$app->post('/apply/candidate', 'Application:candidateApplication');
+
 $app->get('/admin', 'Admin:index')->setName('admin.home');
 
 $app->get('/admin/users', 'Admin:viewAllUser')->setName('admin.view.users');
