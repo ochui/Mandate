@@ -29,4 +29,9 @@ class User extends Model
         'password'  
     ];
 
+    public function candidate()
+    {
+        return $this->hasOne(new \App\Models\Candidate);
+    }
+
 }

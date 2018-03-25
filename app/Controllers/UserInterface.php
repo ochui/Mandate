@@ -2,16 +2,14 @@
 
 namespace App\Controllers;
 
-use \App\Controllers\Controller;
 use App\Auth\Auth;
-use App\Models\Position;
+use App\Models\Candidate;
 use App\Models\Poll;
-
-use Respect\Validation\Validator as v;
+use App\Models\Position;
+use \App\Controllers\Controller;
 
 class UserInterface extends Controller
 {
-    
 
     public function index($request, $response)
     {
@@ -20,7 +18,7 @@ class UserInterface extends Controller
 
     public function signup($request, $response)
     {
-        if(Auth::userIsAuthenticated()) {
+        if (Auth::userIsAuthenticated()) {
             return $response->withRedirect($this->router->pathFor('app.home'));
         }
 
@@ -29,7 +27,7 @@ class UserInterface extends Controller
 
     public function signin($request, $response)
     {
-        if(Auth::userIsAuthenticated()) {
+        if (Auth::userIsAuthenticated()) {
             return $response->withRedirect($this->router->pathFor('app.home'));
         }
 
@@ -38,7 +36,7 @@ class UserInterface extends Controller
 
     public function validationInstruction($request, $response)
     {
-        if(Auth::userIsAuthenticated()) {
+        if (Auth::userIsAuthenticated()) {
             return $response->withRedirect($this->router->pathFor('app.home'));
         }
 
@@ -62,14 +60,59 @@ class UserInterface extends Controller
 
     public function applyToBeVoted($request, $response)
     {
-        $polls = Poll::all();
+        $polls = Poll::where('active', 1)->get();
         $position = Position::all();
-        
+
         $this->view->getEnvironment()->addGlobal('data', [
             'polls' => $polls,
-            'positions' => $position
+            'positions' => $position,
         ]);
 
         return $this->view->render($response, 'applyToBeVoted.html');
+    }
+
+    public function showCandidate($request, $response)
+    {
+        
+        $route = $request->getAttribute('route');
+        $arguments = $route->getArguments();
+
+        $position = Position::all();
+        
+        if(!count($arguments)) {
+
+            $this->view->getEnvironment()->addGlobal('data', [
+                'positions' => $position
+            ]);
+
+            return $this->view->render($response, 'candidate.html');
+        }
+
+        $position = Position::where('name', trim($arguments['position']))->get();
+
+        if(!count($position)) {
+
+            $this->view->getEnvironment()->addGlobal('data', [
+                'positions' => $position
+            ]);
+
+            return $this->view->render($response, 'candidate.html');
+        }
+
+        $data = Candidate::where('approved', 1)->where('position_id', $position[0]->id)->get();
+        $candidates = [];
+        foreach($data as $candidate) {
+            array_push($candidates, [
+                'user' => Candidate::find($candidate->id)->user,
+                'candidate' => $candidate
+            ]);
+        }
+
+        $this->view->getEnvironment()->addGlobal('data', [
+            'candidates' => $candidates,
+            //'positions' => $position
+        ]);
+
+        return $this->view->render($response, 'candidate.html');
     }
 }

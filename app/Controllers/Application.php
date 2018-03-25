@@ -6,6 +6,7 @@ use App\Controllers\Controller;
 use App\Auth\Auth;
 use App\Models\User;
 use App\Models\Candidate;
+use App\Models\Vote;
 
 use Respect\Validation\Validator as v;
 
@@ -67,11 +68,11 @@ class Application extends Controller
                 return $response->withJson([
                     'error' => true,
                     'title' => 'Request Failed',
-                    'message' => $validation->errors
+                    'message' => $validation->errors()
                 ]);
             }
 
-            return $response->withRedirect($this->router->pathFor('auth.signin'));
+            return $response->withRedirect($this->router->pathFor('user.apply.candidate'));
         }
 
         $candidate = Candidate::where('user_id', $_SESSION['userId'])->get();
@@ -114,5 +115,81 @@ class Application extends Controller
         ]);
 
         return $response->withRedirect($this->router->pathFor('user.apply.candidate'));
+    }
+
+    public function voteCandidate($request, $response)
+    {
+        if(!Auth::userIsAuthenticated()) {
+            if($request->isxhr()) {
+                return $response->withJson([
+                    'error' => true,
+                    'title' => 'Authentication Faild',
+                    'message' => 'Please login and try again'
+                ]);
+            }
+            return $response->withRedirect($this->router->pathFor('auth.sign'));
+        }
+
+        $validation = $this->validator->validate($request, [
+            'position_id' => v::notEmpty(),
+            'candidate_id' => v::notEmpty()
+        ]);
+
+        if($validation->failed()) {
+            
+            if($request->isXhr()) {
+                return $response->withJson([
+                    'error' => true,
+                    'title' => 'validation failed',
+                    'message' => $validation->errors()
+                ]);
+            }
+
+            $this->flash->addMessage('error', [
+                'vote' => 'Invalid candidate id'
+            ]);
+            return $response->withRedirect($this->router->pathFor('app.vote'));
+        }
+        
+        $userCanVote = Vote::where('user_id', $_SESSION['userId'])->where('position_id', $request->getParam('position_id'))->get()->count() === 0;
+
+        if(!$userCanVote) {
+            if($request->isXhr()) {
+
+                return $response->withJson([
+                    'error' => true,
+                    'title' => 'Request denied',
+                    'message' => 'Sorry but you can only vote onces'
+                ]);
+                
+            }
+
+            $this->flash->addMessage('message', [
+                'vote' => 'Sorry but you can only vote onces'
+            ]);
+            return $response->withRedirect($this->router->pathFor('app.vote'));
+        }
+
+        Vote::create([
+            'user_id' => $_SESSION['userId'],
+            'candidate_id' => $request->getParam('candidate_id'),
+            'position_id' => $request->getParam('position_id'),
+            'poll_id' => $request->getParam('poll_id')
+        ]);
+
+        if($request->isXhr()) {
+
+            return $response->withJson([
+                'error' => false,
+                'title' => 'Request Completed',
+                'message' => 'Thank you for voting'
+            ]);
+            
+        }
+
+        $this->flash->addMessage('message', [
+            'vote' => 'Thank you for voting'
+        ]);
+        return $response->withRedirect($this->router->pathFor('app.vote'));
     }
 }

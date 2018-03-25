@@ -1,17 +1,91 @@
 {% extends "auth/auth.html" %}
 {% block content %}
-{{ errors | json_encode }}
-    <form action="{{ path_for('auth.signup') }}" method="post">
-        <input type="text" name="email" id="email" value="{{ oldFormInput.email }}" placeholder="Email"><br>
-        <input type="text" name="surname" id="surname" value="{{ oldFormInput.surname }}" placeholder="Surname"><br>
-        <input type="text" name="first_name" id="first_name" value="{{ oldFormInput.first_name }}" placeholder="First Name"><br>
-        <input type="text" name="last_name" id="last_name" value="{{ oldFormInput.last_name }}" placeholder="Last Name"><br>
-        <input type="text" name="nationality" id="nationality" value="{{ oldFormInput.nationality }}" placeholder="Nationality"><br>
-        <input type="text" name="state_of_origin" id="state_of_origin" value="{{ oldFormInput.state_of_origin }}" placeholder="State of origin"><br>
-        <input type="text" name="local_government" id="local_government" value="{{ oldFormInput.local_government }}" placeholder="Local government"><br>
-        <input type="text" name="date_of_birth" id="date_of_birth" value="{{ oldFormInput.date_of_birth }}" placeholder="Date of birth"><br>
-        <input type="text" name="password" id="password" placeholder="Password"><br>
-        <button type="submit">Signup</button>
-    </form>
-    <p><a href="{{ path_for('auth.signin') }}">Signin</a></p>
+<div class="container">
+    <div class="row">
+        <div class="margin-top-30 margin-bottom-50">
+            <div class="row">
+
+                <div class="col-md-offset-3 col-sm-offset-2 col-md-6 col-sm-8">
+
+                    <div class="row">
+                        <div class="contact-us-detail">
+                            <a href="{{ path_for('auth.signin') }}">Sign in</a>
+                        </div>
+                        <form class="contact-us pattern-bg" method="POST" action="{{ auth.signup }}">
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name="email" id="email" value="{{ oldFormInput.email }}" placeholder="Your Email">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="surname" id="surname" value="{{ oldFormInput.surname }}" placeholder="Surname">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="first_name" id="first_name" value="{{ oldFormInput.first_name }}" placeholder="First Name">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="last_name" id="last_name" value="{{ oldFormInput.last_name }}" placeholder="Last Name">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text"  class="form-control" name="nationality" id="nationality" value="{{ oldFormInput.nationality }}" placeholder="Nationality">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text"  class="form-control" id="state_of_origin" value="{{ oldFormInput.state_of_origin }}" placeholder="State of origin">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text"  class="form-control" name="local_government" id="local_government" value="{{ oldFormInput.local_government }}" placeholder="Local government">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="date_of_birth" id="date_of_birth" value="{{ oldFormInput.date_of_birth }}" placeholder="Date of birth">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="password"  class="form-control" name="password" id="password" placeholder="Password">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="password" id="password_confirm" class="form-control" placeholder="Password Confirm">
+                                </div>
+                            </div>
+
+
+
+                            <div class="text-center">
+                                <button type="submit" class="button button-style button-style-dark button-style-color-2">Sign up</button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
 {% endblock %}

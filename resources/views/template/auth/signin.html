@@ -1,10 +1,42 @@
 {% extends "auth/auth.html" %}
 
 {% block content %}
-    <form action="{{ path_for('auth.signin') }}" method="post">
-        <input type="text" name="email" id="email" value="{{ oldFormInput.email }}" placeholder="E-mail or Voter ID">
-        <input type="text" name="password" id="password" placeholder="Password">
-        <button type="submit">Signin</button>
-    </form>
-    <p><a href="{{ path_for('auth.signup') }}">Signup</a></p>
+<div class="container">
+    <div class="row">
+        <div class="margin-top-30 margin-bottom-50">
+            <div class="row">
+
+                <div class="col-md-offset-3 col-sm-offset-2 col-md-6 col-sm-8">
+
+                    <div class="row">
+                        <div class="contact-us-detail">
+                            <a href="{{ path_for('auth.signup') }}">Sign up</a>
+                        </div>
+                        <form class="contact-us pattern-bg" action="{{ path_for('auth.signin') }}" method="post">
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="email" id="email" value="{{ oldFormInput.email }}" placeholder="E-mail or Voter ID"">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="button button-style button-style-dark button-style-color-2">Sign in</button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
 {% endblock %}

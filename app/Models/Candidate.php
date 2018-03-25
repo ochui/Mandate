@@ -23,4 +23,14 @@ class Candidate extends Model
  
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(new \App\Models\User);
+    }
+
+    public function position()
+    {
+        return $this->belongsTo(new \App\Models\Position);
+    }
+
 }

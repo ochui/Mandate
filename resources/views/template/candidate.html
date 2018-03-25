@@ -1,0 +1,74 @@
+{% extends "app.html" %}
+{% block content %}
+    <!-- Testimonial Start -->
+    <section id="testimonials" class="testimonial-section section-space-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="section-title">
+                        <h2>Voters Console</h2>
+                        <div class="divider dark">
+                            <i class="icon-emotsmile"></i>
+                        </div>
+                        <p>Application for</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {% if data.candidates %}
+                    <div class="col-md-offset-3 col-sm-offset-2 col-md-6 col-sm-8">
+                        <div class="testimonial-carousel-list margin-top-20" id="votepanel">
+
+                            {% for candidate in data.candidates %}
+                                <div class="testimonial-word text-center">
+                                    <img src="{{ base_url() }}/resources/assets/images/testimonial/1.png" class="img-responsive" alt="">
+                                    <h2>{{ candidate.candidate.id | fullname }}</h2>
+                                    <p>
+                                        <span>{{ candidate.user.nationality }}</span>
+                                        <hr/>
+                                        <span>{{ candidate.user.state_of_origin }}</span>
+                                    </p>
+                                    <div class="text-center">
+                                        <form action="" id="candidate{{ candidate.candidate.id }}">
+                                            <input type="hidden" name="candidate_id" value="{{ candidate.candidate.id }}">
+                                            <input type="hidden" name="position_id" value="{{ candidate.candidate.position_id }}">
+                                        </form>
+                                        <button type="submit" class="button button-style button-style-dark button-style-color-2" id="votebtn" onclick="vote('{{ candidate.candidate.id }}')">Vote</button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-md-offset-4 col-sm-offset-3 col-md-8 col-sm-10"></div>
+                    <div class="margin-top-150">
+
+                        <div class="table-responsive">
+                            <table class="table">
+
+                                {% for position in data.positions %}
+                                    <tr>
+                                        <td style="width: auto;">
+                                            <b>{{ position.name }}</b>
+                                        </td>
+                                        <td style="background:inherit">
+                                            <div class="text-center">
+                                                <a href="{{ path_for('app.show.candidate', {position:position.name}) }}" target="_blank" style="color: black;" class="button button-style button-style-dark button-style-color-2">View Candidates</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+<!-- Testimonial End -->
+
+{% endblock %}

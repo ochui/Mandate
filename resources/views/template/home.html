@@ -1,5 +1,208 @@
 {% extends "app.html" %}
 
 {% block content %}
-    <p>Sweet</p>
+{% if poll.active.id %}
+        <!-- Home Section Start -->
+        <section class="home-section">
+            <div class="container">
+                <div class="row">
+                    
+                     <div class="col-sm-offset-2 col-md-4 col-sm-6 margin-left-setting">
+                        <div class="margin-top-150">
+                            
+                         <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{{ poll.active.name }}</td>
+                                 </tr>
+                                 <tr>
+                                    <td>Description</td>
+                                    <td>{{ poll.active.description }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Start</td>
+                                    <td>{{ poll.active.starts }}</td>
+                                 </tr>
+                                <tr>
+                                    <td>End</td>
+                                    <td>{{ poll.active.ends }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Contact</td>
+                                    <td>1234567890</td>
+                                </tr>
+                                <tr>
+                                    <td>Resume</td>
+                                    <td style="background-color: #51b968;"><a href="#" target="_blank" data-toggle="tooltip" data-placement="top" title="Check Out My Resume">Resume.pdf</a></td>
+                                </tr>
+                            </table>
+                          </div>
+                         </div>
+                       </div>
+                     
+                     <div class="col-md-5 col-sm-6">
+                        <div class="me-image">
+                          <img src="{{ base_url() }}/resources/assets/images/bg/profile.png" alt="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </section>
+            <!-- Home Section End -->
+    
+{% endif %}
+
+    <!-- About Start -->
+    <section id="about" class="about section-space-padding">
+        <div class="container">
+           <div class="row">
+                 <div class="col-sm-12">
+                     <div class="section-title">
+                         <h2>About Me.</h2>
+                          <div class="divider dark">
+                            <i class="icon-emotsmile"></i>
+                           </div>
+                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                     </div>
+                 </div>
+             </div>
+             
+             
+             <div class="row">
+               
+               <div class="col-md-6">
+                <div class="about-me-text margin-top-50">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus feugiat facilisis dignissim. Etiam scelerisque ultricies euismod. Etiam pellentesque enim ac risus dapibus consequat. Nulla euismod lacinia felis, vel <a href="#" data-toggle="modal" data-target="#skillmodal" title="My Skills"><b>Check out my Skills</b></a> massa accumsan sit amet. Cras id fermentum neque. Curabitur et mollis neque. Fusce eu mattis arcu. Integer eget augue sit amet lorem convallis fermentum, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus feugiat facilisis dignissim. Etiam scelerisque ultricies euismod. Etiam pellentesque enim ac risus dapibus consequat.</p>
+                </div>
+               </div>
+                
+              <div class="col-md-6">
+                 <div class="about-me-text pattern-bg margin-top-50 margin-bottom-50">
+                   <div class="text-center">
+                     <a class="button button-style button-style-dark button-style-color-2" data-toggle="modal" data-target="#subscribemodal" href="#">Subscribe</a>
+                   </div>
+                </div>
+                
+              <div class="about-me-text">
+                
+                <ul class="social-icon">
+                 <li><a href="#" target="_blank" class="facebook"><i class="icon-social-facebook"></i></a></li>
+                 <li><a href="#" target="_blank" class="twitter"><i class="icon-social-twitter"></i></a></li>
+                 <li><a href="#" target="_blank" class="behance"><i class="icon-social-behance"></i></a></li>
+                 <li><a href="#" target="_blank" class="dribbble"><i class="icon-social-dribbble"></i></a></li>
+                </ul>
+                
+                </div>
+               </div>
+               
+             </div>
+           </div>
+        </section>
+        
+       <!-- Skills Modal Start -->
+       <div class="modal fade padding-top-70" id="skillmodal" role="dialog">
+         <div class="modal-dialog">
+     
+       
+       <div class="modal-content pattern-bg">
+         <div class="modal-body">
+            <div class="row">
+                 <div class="col-sm-12">
+                     <div class="section-title margin-top-30">
+                       <button type="button" class="btn pull-right" data-dismiss="modal"><i class="fa fa-close"></i></button>
+                         <h2>My Skills.</h2>
+                          <div class="divider dark">
+                            <i class="icon-energy"></i>
+                           </div>
+                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                     </div>
+                 </div>
+             </div>
+             
+           <div class="row">
+            <div class="col-sm-offset-2 col-xs-offset-0 col-md-8 col-sm-8">
+           
+             <div class="my-skill margin-bottom-50">
+                     <strong>Graphic Design</strong>
+                        <span class="pull-right">80%</span>
+                             <div class="progress">
+                                  <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">
+                                 </div>
+                               </div>
+ 
+                      <strong>Website Design</strong>
+                          <span class="pull-right">99%</span>
+                              <div class="progress">
+                                   <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100" style="width: 99%;">
+                                 </div>
+                               </div>
+ 
+                       <strong>HTML5/CSS3</strong>
+                          <span class="pull-right">85%</span>
+                              <div class="progress">
+                                   <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">
+                               </div>
+                            </div>
+                           
+                        <strong>Javascript</strong>
+                          <span class="pull-right">90%</span>
+                              <div class="progress">
+                                   <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">
+                               </div>
+                            </div>
+                         </div>
+           
+                    </div>
+                </div>
+             </div>
+           </div>
+         </div>
+       </div>
+       <!-- Skills Modal End -->
+       
+       
+       
+       <!-- Subscribe Modal Start -->
+       <div class="modal fade subscribe padding-top-120" id="subscribemodal" role="dialog">
+         <div class="modal-dialog">
+     
+       
+       <div class="modal-content">
+         <div class="modal-body">
+            <div class="row">
+                 <div class="col-sm-12">
+                     <div class="section-title margin-top-30">
+                       <button type="button" class="btn pull-right" data-dismiss="modal"><i class="fa fa-close"></i></button>
+                         <h2>Subscribe.</h2>
+                          <div class="divider dark">
+                            <i class="icon-envelope-letter"></i>
+                           </div>
+                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                     </div>
+                 </div>
+             </div>
+             
+           <div class="row">
+            <div class="col-sm-offset-2 col-xs-offset-0 col-md-8 col-sm-8">
+           
+             <div class="margin-bottom-50">
+                     <form id="mc-form" method="post" action="http://uipasta.us14.list-manage.com/subscribe/post?u=854825d502cdc101233c08a21&amp;id=86e84d44b7">
+                                 
+                           <div class="subscribe-form">
+                              <input id="mc-email" type="email" placeholder="Email Address" class="text-input">
+                               <button class="submit-btn" type="submit">Submit</button>
+                                 </div>
+                                 <label for="mc-email" class="mc-label"></label>
+                               </form>
+                            </div>
+                         </div>
+                      </div>
+                  </div>
+              </div>
+           </div>
+        </div>
+        <!-- Subscribe Modal End -->
+        <!-- About End -->
+     
 {% endblock %}

@@ -2,11 +2,15 @@
 
 namespace App\Controllers\Admin;
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
 use App\Controllers\Controller;
 use App\Models\Poll;
 use App\Models\User;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use App\Models\Candidate;
+use App\Auth\Auth;
+
 use Respect\Validation\Validator as v;
 use Xandros15\SlimPagination\Pagination;
 
@@ -22,28 +26,73 @@ class Admin extends Controller
     {
         $users = User::get();
 
-        $pagination = new Pagination($request, $this->router, [
-            Pagination::OPT_TOTAL => count($users), #number of items
-            #Pagination::OPT_PARAM_TYPE => PageList::PAGE_ATTRIBUTE
-        ]);
-
-        $param = $pagination->toArray();
-
-        $this->view->getEnvironment()->addGlobal('users', User::offset(($param['current_page'] - 1) * $param['per_page'])->limit($param['per_page'])->get());
-        $this->view->getEnvironment()->addGlobal('pagination', $pagination);
+        $this->view->getEnvironment()->addGlobal('users', $users);
 
         return $this->view->render($response, 'admin/browseUser.html');
     }
 
-    public function viewAspirant(Request $request, Response $response)
+    public function processRequest(Request $request, Response $response)
     {
+        if(!Auth::userIsAuthenticated()) {
+            if($request->isXhr()) {
+                return $response->withJson([
+                    'error' => true,
+                    'title' => 'Authentication Failed',
+                    'message' => 'Please login'
+                ]);
+            }
 
+            $this->flash->addMessage('error', 'Please sign in to continue');
+            return $response->withRedirect($th->router->pathFor('auth.signin'));
+        }
+
+        if(!$_SESSION['canManage']) {
+            if($request->isXhr()) {
+                return $response->withJson([
+                    'error' => true,
+                    'title' => 'Unauthorise Access',
+                    'message' => 'You Don Not Have Administrative Privillages To Perform These Operation'
+                ]);
+            }
+
+            $this->flash->addMessage('error', 'You Don Not Have Administrative Privillages To Perform These Operation');
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
+
+        $candidate = Candidate::where('user_id', $request->getParam('candidate_id'))->get();
+
+        if(!count($candidate)) {
+            if($request->isXhr()) {
+                return $response->withJson([
+                    'error' => true,
+                    'title' => 'Invalid Candidate Id',
+                    'message' => 'No Candidate Found For The Specified Id'
+                ]);
+            }
+
+            $this->flash->addMessage('error', 'No Candidate Found For The Specified Id');
+            return $response->withRedirect($this->router->pathFor('admn.view.candidates'));
+        }
+
+        $candidate = $candidate[0];
+        
+        $candidate->approved = $request->getParam('accept') ? 1 : 2;
+        $candidate->save();
+
+        if($request->isXhr()) {
+            return $response->withJson([
+                'error' => false,
+                'title' => 'Action Successful',
+                'message' => $request->getParam('accept') ? 'Candidate Request Accepted' : 'Candidate Request Rejected',
+                'element' => $request->getParam('candidate_id'),
+                'text' => $request->getParam('accept') ? 'Accepted' : 'Rejected'
+            ]);
+        }
+
+        $this->flash->addMessage('error', $request->getParam('accept') ? 'Request Accepted' : 'Request Rejected');
+        return $response->withRedirect($this->router->pathFor('admn.view.candidates'));
     }
 
-    public function viewApprovedAspirant(Request $request, Response $response)
-    {
-
-    }
 
     public function getPollForm(Request $request, Response $response)
     {
@@ -84,18 +133,18 @@ class Admin extends Controller
 
     public function browseCandidate($request, $response)
     {
-        $candidates = Candidate::all();
+        $data = Candidate::all();
+        $candidates = [];
 
-        $pagination = new Pagination($request, $this->router, [
-            Pagination::OPT_TOTAL => count($candidate), #number of items
-            #Pagination::OPT_PARAM_TYPE => PageList::PAGE_ATTRIBUTE
-        ]);
+        foreach ($data as $candidate) {
+            array_push($candidates, [
+                'user' => $candidate->user,
+                'candidate' => $candidate
+            ]);
+        }
 
-        $param = $pagination->toArray();
+        $this->view->getEnvironment()->addGlobal('candidates', $candidates);
 
-        $this->view->getEnvironment()->addGlobal('candidates', Candidate::offset(($param['current_page'] - 1) * $param['per_page'])->limit($param['per_page'])->get());
-        $this->view->getEnvironment()->addGlobal('pagination', $pagination);
-
-        return $this->view->render($response, 'admin/browseUser.html');
+        return $this->view->render($response, 'admin/browseCandidate.html');
     }
 }

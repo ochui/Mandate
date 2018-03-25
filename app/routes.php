@@ -20,13 +20,18 @@ $app->get('/apply/voter', 'UserInterface:applyToVote')->setName('user.apply.vote
 $app->post('/apply/voter', 'Application:VotersApplication');
 $app->get('/apply/candidate', 'UserInterface:applyToBeVoted')->setName('user.apply.candidate');
 $app->post('/apply/candidate', 'Application:candidateApplication');
+$app->post('/candidate', 'Application:voteCandidate');
+$app->get('/candidate[/{position}]', 'UserInterface:showCandidate')->setName('app.show.candidate');
 
 $app->get('/admin', 'Admin:index')->setName('admin.home');
 
 $app->get('/admin/users', 'Admin:viewAllUser')->setName('admin.view.users');
+$app->get('/admin/candidates', 'Admin:browseCandidate')->setName('admin.view.candidates');
+$app->post('/admin/candidates', 'Admin:processRequest');
 
 $app->get('/admin/create/poll', 'Admin:getPollForm')->setName('admin.create.poll');
 $app->post('/admin/create/poll', 'Admin:createPoll');
 $app->get('/admin/view/poll', 'Admin:browsePoll')->setName('admin.view.poll');
+
 
 
