@@ -47,3 +47,5 @@ $container['Admin'] = function ($container) {
 $container['Application'] = function ($container) {
     return new App\Controllers\Application($container);
 };
+
+$container['upload'] = BASEPATH.'/uploads';

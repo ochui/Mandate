@@ -20,6 +20,7 @@ class User extends Model
             'password',
             'activation_token',
             'email',
+            'avatar'
     ];
 
     protected $gaurded = [

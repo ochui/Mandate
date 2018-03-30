@@ -14,7 +14,6 @@ class AuthController extends Controller
     {
 
         $validation = $this->validator->validate($request, [
-            'image' => v::image(),
             'surname' => v::notEmpty()->alpha()->noWhitespace(),
             'local_government' => v::notEmpty()->alpha(),
             'state_of_origin' => v::notEmpty(),
@@ -32,9 +31,9 @@ class AuthController extends Controller
         $uploadedFiles = $request->getUploadedFiles();
         // handle single input with single file upload
         $uploadedFile = $uploadedFiles['image'];
-
+        $directory = $this->container->get('upload');
         if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-            $filename = moveUploadedFile($directory, $uploadedFile);
+            $filename = $this->moveUploadedFile($directory, $uploadedFile);
         }else{
             $this->view->getEnvironment()->addGlobal('error', 'Unable to upload your photograph');
             return $response->withRedirect($this->router->pathFor('auth.signup'));
