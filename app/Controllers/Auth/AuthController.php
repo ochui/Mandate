@@ -2,8 +2,8 @@
 
 namespace App\Controllers\Auth;
 
-use App\Controllers\Controller;
 use App\Auth\Auth;
+use App\Controllers\Controller;
 use App\Models\User;
 use Respect\Validation\Validator as v;
 
@@ -14,6 +14,7 @@ class AuthController extends Controller
     {
 
         $validation = $this->validator->validate($request, [
+            'image' => v::image(),
             'surname' => v::notEmpty()->alpha()->noWhitespace(),
             'local_government' => v::notEmpty()->alpha(),
             'state_of_origin' => v::notEmpty(),
@@ -21,14 +22,23 @@ class AuthController extends Controller
             'last_name' => v::notEmpty()->alpha()->noWhitespace(),
             'date_of_birth' => v::notEmpty()->date(),
             'email' => v::notEmpty()->noWhitespace()->email()->emailAvaliable(),
-            'password' => v::notEmpty()->noWhitespace()
+            'password' => v::notEmpty()->noWhitespace(),
         ]);
 
         if ($validation->failed()) {
             return $response->withRedirect($this->router->pathFor('auth.signup'));
         }
 
-        
+        $uploadedFiles = $request->getUploadedFiles();
+        // handle single input with single file upload
+        $uploadedFile = $uploadedFiles['image'];
+
+        if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+            $filename = moveUploadedFile($directory, $uploadedFile);
+        }else{
+            $this->view->getEnvironment()->addGlobal('error', 'Unable to upload your photograph');
+            return $response->withRedirect($this->router->pathFor('auth.signup'));
+        }
 
         $user = User::create([
             'surname' => $request->getParam('surname'),
@@ -37,6 +47,7 @@ class AuthController extends Controller
             'date_of_birth' => $request->getParam('date_of_birth'),
             'first_name' => $request->getParam('first_name'),
             'last_name' => $request->getParam('last_name'),
+            'avatar' => $filename,
             'password' => password_hash($request->getParam('password'), PASSWORD_DEFAULT),
             'activation_token' => base64_encode(crypt($request->getParam('email') . $request->getParam('first_name') . $request->getParam('last_name'))),
             'email' => $request->getParam('email'),
@@ -45,7 +56,7 @@ class AuthController extends Controller
         $voteId = strtoupper(implode('', [
             'nationality' => 'ng',
             'state' => substr($request->getParam('state_of_origin'), 0, 3),
-            'userId' => $user->id
+            'userId' => $user->id,
         ]));
 
         $user->voter_id = $voteId;
@@ -65,7 +76,7 @@ class AuthController extends Controller
 
         if ($validation->failed()) {
 
-            if($request->isXhr()) {
+            if ($request->isXhr()) {
                 return $response->withJson($_SESSION['errors']);
             }
             return $response->withRedirect($this->router->pathFor('auth.signin'));
@@ -75,7 +86,7 @@ class AuthController extends Controller
 
         if (!$authentication->error) {
 
-            if($request->isXhr()) {
+            if ($request->isXhr()) {
                 return $response->withJson($authentication);
             }
 
@@ -83,7 +94,7 @@ class AuthController extends Controller
             return $response->withRedirect($this->router->pathFor('auth.signin'));
         }
 
-        if($request->isXhr()) {
+        if ($request->isXhr()) {
             return $response->withJson($authentication);
         }
 
@@ -103,26 +114,25 @@ class AuthController extends Controller
 
         $user = User::where('activation_token', $activationToken)->get()[0];
 
-        if(!$user) {
+        if (!$user) {
             #invalid activation token
-            if($request->isXhr()) {
+            if ($request->isXhr()) {
                 return $response->withJson([
                     'error' => true,
                     'title' => 'validation failed',
-                    'message' => 'invalid activation tokon'
+                    'message' => 'invalid activation tokon',
                 ]);
             }
 
             return $response->withRedirect($this->router->pathFor('auth.validate.error'));
         }
 
-        if($user->active == 1) {
+        if ($user->active == 1) {
             return $response->withRedirect($this->router->pathFor('app.home'));
         }
 
         $user->active = 1;
         $user->save();
-
 
         return $response->withRedirect($this->router->pathFor('auth.validate.success'));
     }
