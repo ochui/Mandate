@@ -11,13 +11,15 @@ class User extends Model
     
 
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'login_token',
-        'activation_token',
-        'registration_ip',
-        'password'
+        'surname',
+            'local_government',
+            'state_of_origin',
+            'date_of_birth',
+            'first_name' ,
+            'last_name' ,
+            'password',
+            'activation_token',
+            'email',
     ];
 
     protected $gaurded = [

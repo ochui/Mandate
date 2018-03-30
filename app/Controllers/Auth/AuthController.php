@@ -14,8 +14,12 @@ class AuthController extends Controller
     {
 
         $validation = $this->validator->validate($request, [
+            'surname' => v::notEmpty()->alpha()->noWhitespace(),
+            'local_government' => v::notEmpty()->alpha(),
+            'state_of_origin' => v::notEmpty(),
             'first_name' => v::notEmpty()->alpha()->noWhitespace(),
             'last_name' => v::notEmpty()->alpha()->noWhitespace(),
+            'date_of_birth' => v::notEmpty()->date(),
             'email' => v::notEmpty()->noWhitespace()->email()->emailAvaliable(),
             'password' => v::notEmpty()->noWhitespace()
         ]);
@@ -24,7 +28,13 @@ class AuthController extends Controller
             return $response->withRedirect($this->router->pathFor('auth.signup'));
         }
 
-        User::create([
+        
+
+        $user = User::create([
+            'surname' => $request->getParam('surname'),
+            'local_government' => $request->getParam('local_government'),
+            'state_of_origin' => $request->getParam('state_of_origin'),
+            'date_of_birth' => $request->getParam('date_of_birth'),
             'first_name' => $request->getParam('first_name'),
             'last_name' => $request->getParam('last_name'),
             'password' => password_hash($request->getParam('password'), PASSWORD_DEFAULT),
@@ -32,7 +42,18 @@ class AuthController extends Controller
             'email' => $request->getParam('email'),
         ]);
 
-        return $response->withRedirect($this->router->pathFor('auth.validation.instruction'));
+        $voteId = strtoupper(implode('', [
+            'nationality' => 'ng',
+            'state' => substr($request->getParam('state_of_origin'), 0, 3),
+            'userId' => $user->id
+        ]));
+
+        $user->voter_id = $voteId;
+        $user->active = 1;
+        $user->save();
+
+        return $response->withRedirect($this->router->pathFor('auth.signin'));
+        #return $response->withRedirect($this->router->pathFor('auth.validation.instruction'));
     }
 
     public function signin($request, $response)

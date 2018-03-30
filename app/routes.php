@@ -33,5 +33,7 @@ $app->get('/admin/create/poll', 'Admin:getPollForm')->setName('admin.create.poll
 $app->post('/admin/create/poll', 'Admin:createPoll');
 $app->get('/admin/view/poll', 'Admin:browsePoll')->setName('admin.view.poll');
 
+$app->get('/admin/result[/{position}]', 'Admin:showResult')->setName('admin.view.result');
+
 
 
