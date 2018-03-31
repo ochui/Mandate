@@ -29,9 +29,9 @@ $app->get('/admin/users', 'Admin:viewAllUser')->setName('admin.view.users');
 $app->get('/admin/candidates', 'Admin:browseCandidate')->setName('admin.view.candidates');
 $app->post('/admin/candidates', 'Admin:processRequest');
 
-$app->get('/admin/create/poll', 'Admin:getPollForm')->setName('admin.create.poll');
-$app->post('/admin/create/poll', 'Admin:createPoll');
-$app->get('/admin/view/poll', 'Admin:browsePoll')->setName('admin.view.poll');
+$app->get('/admin/create/election', 'Admin:getPollForm')->setName('admin.create.poll');
+$app->post('/admin/create/election', 'Admin:createPoll');
+$app->get('/admin/view/election', 'Admin:browsePoll')->setName('admin.view.poll');
 
 $app->get('/admin/result[/{position}]', 'Admin:showResult')->setName('admin.view.result');
 

@@ -1,18 +1,49 @@
 {% extends "admin/dashboard.html" %}
 {% block content %}
-    <div>
-        <form action="{{ path_for('admin.create.poll') }}" method="post">
-            <input type="text" name="name" id="name" placeholder="Poll name">
-            <input type="text" name="description" id="description" placeholder="Description">
-            <select name="parent" id="parent" placeholder="parent">
-                <option value="">No parent</option>
-                {% for poll in polls %}
-                    <option value="{{ poll.id }}">{{ poll.name }}</option>
-                {% endfor %}
-            </select>
-            <input type="date" name="start" id="start" placeholder="Start time">
-            <input type="date" name="end" id="ends" placeholder="End time">
-            <button type="submit">Create Poll</button>
-        </form>
-    </div>
-{% endblock %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Create Election</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" action="{{ path_for('admin.create.poll') }}" method="post">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="name">Election Name</label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="E.g 2089 General Election">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input class="form-control" type="text" name="description" id="description" placeholder="Short Description..">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Starting Day</label>
+                                <input class="form-control" type="date" name="start" id="start" placeholder="Start time">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Ending Day</label>
+                                <input class="form-control" type="date" name="end" id="ends" placeholder="End time">
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="set_active">
+                                    Set as Current Election
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+
+                        </div>
+                        <!-- /.box-body -->
+
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </section>
+            <!-- /.content -->
+        {% endblock %}

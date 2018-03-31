@@ -5,7 +5,6 @@
             <div class="margin-top-30 margin-bottom-50">
                 <div class="row">
                     <div class="col-md-offset-3 col-sm-offset-2 col-md-6 col-sm-8">
-                        {{ errors | json_encode }}
                         <div class="row">
                             <div class="contact-us-detail">
                                 <a href="{{ path_for('auth.signin') }}">Sign in</a>
@@ -62,7 +61,7 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="date_of_birth" id="date_of_birth" value="{{ oldFormInput.date_of_birth }}" placeholder="Date of birth">
+                                        <input type="date" class="form-control" name="date_of_birth" id="date_of_birth" value="{{ oldFormInput.date_of_birth }}" placeholder="Date of birth">
                                     </div>
                                 </div>
 

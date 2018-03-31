@@ -15,7 +15,7 @@
         <meta name="copyright" content="company name">
         <meta name="robots" content="index,follow">
 
-        <title>We vote</title>
+        <title>Nigeria I-Voting</title>
 
         <!-- Favicon -->
         <link rel="shortcut icon" href="{{ base_url() }}/resources/assets/images/favicon/favicon.ico">
@@ -68,21 +68,12 @@
                                     <div class="navbar-collapse collapse">
                                         <ul class="nav navbar-nav navbar-right">
                                             <li class="active">
-                                                <a class="smoth-scroll" href="#home">Home
+                                                <a class="smoth-scroll" href="{{ path_for('app.home') }}">Home
                                                     <div class="ripple-wrapper"></div>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="smoth-scroll" href="#about">About</a>
-                                            </li>
-                                            <li>
-                                                <a class="smoth-scroll" href="#portfolio">Portfolio</a>
-                                            </li>
-                                            <li>
-                                                <a class="smoth-scroll" href="#services">services</a>
-                                            </li>
-                                            <li>
-                                                <a class="smoth-scroll" href="#contact">Contact</a>
+                                                <a class="smoth-scroll" href="{{ path_for('app.show.candidate') }}">Candidate</a>
                                             </li>
                                             {% if auth.userIsAuthenticated %}
                                                 <li>
@@ -134,7 +125,7 @@
           </div>
               
              <div class="col-md-12 uipasta-credit">
-                <p>We Vote &copy; 2018 </p>
+                <p>Nigeria I- Voting &copy; 2018 </p>
                 </div>
                 
              </div>
