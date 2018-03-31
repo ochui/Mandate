@@ -49,6 +49,8 @@ class Auth
             $_SESSION['userId'] = $userData->id;
             if (in_array($userData->role, [1,2,3])) {
                 $_SESSION['canManage'] = true;
+            }else {
+                $_SESSION['canManage'] = false;
             }
             return [
                 'error' => false,

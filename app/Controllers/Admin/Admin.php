@@ -18,11 +18,17 @@ class Admin extends Controller
 
     public function index(Request $request, Response $response)
     {
+        if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
         return $this->view->render($response, 'admin/home.html');
     }
 
     public function viewAllUser(Request $request, Response $response)
     {
+        if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
         $users = User::get();
 
         $this->view->getEnvironment()->addGlobal('users', $users);
@@ -42,7 +48,7 @@ class Admin extends Controller
             }
 
             $this->flash->addMessage('error', 'Please sign in to continue');
-            return $response->withRedirect($th->router->pathFor('auth.signin'));
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
         }
 
         if (!$_SESSION['canManage']) {
@@ -84,7 +90,7 @@ class Admin extends Controller
                 'title' => 'Action Successful',
                 'message' => $request->getParam('accept') ? 'Candidate Request Accepted' : 'Candidate Request Rejected',
                 'element' => $request->getParam('candidate_id'),
-                'text' => $request->getParam('accept') ? 'Accepted' : 'Rejected',
+                'text' => $request->getParam('accept') ? 'Approved' : 'Rejected',
             ]);
         }
 
@@ -94,6 +100,10 @@ class Admin extends Controller
 
     public function getPollForm(Request $request, Response $response)
     {
+        if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
+
         $polls = Poll::all();
         $this->view->getEnvironment()->addGlobal('polls', $polls);
         return $this->view->render($response, 'admin/createPoll.html');
@@ -124,6 +134,10 @@ class Admin extends Controller
 
     public function browsePoll($request, $response)
     {
+        if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
+
         $polls = Poll::all();
         $this->view->getEnvironment()->addGlobal('polls', $polls);
         return $this->view->render($response, 'admin/browsePolls.html');
@@ -131,6 +145,10 @@ class Admin extends Controller
 
     public function browseCandidate($request, $response)
     {
+        if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
+
         $data = Candidate::all();
         $candidates = [];
 
@@ -148,6 +166,10 @@ class Admin extends Controller
 
     public function showResult($request, $response)
     {
+        if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
+
         $route = $request->getAttribute('route');
         $arguments = $route->getArguments();
 
