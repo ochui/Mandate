@@ -26,13 +26,19 @@
                                     <h2>{{ candidate.candidate.id | fullname }}</h2>
                                     <p>
                                         <span>{{ candidate.user.nationality }}</span>
-                                        <hr/>
-                                        <span>{{ candidate.user.state_of_origin }}</span>
+                                        <span>Age : {{ candidate.user.date_of_birth | age }}</span><br>
+                                        <span>State of origin : {{ candidate.user.state_of_origin }}</span>
+
                                     </p>
                                     <div class="text-center">
-                                        <form action="" id="candidate{{ candidate.candidate.id }}">
+                                        <form action="" id="candidate{{ candidate.candidate.id }}" method="POST">
                                             <input type="hidden" name="candidate_id" value="{{ candidate.candidate.id }}">
                                             <input type="hidden" name="position_id" value="{{ candidate.candidate.position_id }}">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <input type="password" id="voter_id_{{ candidate.candidate.id }}" name="pin" class="form-control" placeholder="Enter Your Pin">
+                                                </div>
+                                            </div>
                                         </form>
                                         <button type="submit" class="button button-style button-style-dark button-style-color-2" id="votebtn" onclick="vote('{{ candidate.candidate.id }}')">Vote</button>
                                     </div>

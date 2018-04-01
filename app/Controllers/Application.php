@@ -132,7 +132,8 @@ class Application extends Controller
 
         $validation = $this->validator->validate($request, [
             'position_id' => v::notEmpty(),
-            'candidate_id' => v::notEmpty()
+            'candidate_id' => v::notEmpty(),
+            'pin' => v::notEmpty()
         ]);
 
         if($validation->failed()) {
@@ -147,6 +148,26 @@ class Application extends Controller
 
             $this->flash->addMessage('error', [
                 'vote' => 'Invalid candidate id'
+            ]);
+            return $response->withRedirect($this->router->pathFor('app.vote'));
+        }
+
+        $user = User::where('voter_id', $request->getParam('pin'))->where('id', $_SESSION['userId'])->get();
+        $pinIsValid = $user->count();
+        
+        if(!$pinIsValid) {
+            if($request->isXhr()) {
+
+                return $response->withJson([
+                    'error' => true,
+                    'title' => 'Request denied',
+                    'message' => 'Sorry, but the pin you provided is incorrect'
+                ]);
+                
+            }
+
+            $this->flash->addMessage('message', [
+                'vote' => 'Sorry, but the pin you provided is incorrect'
             ]);
             return $response->withRedirect($this->router->pathFor('app.vote'));
         }

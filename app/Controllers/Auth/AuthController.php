@@ -19,7 +19,7 @@ class AuthController extends Controller
             'state_of_origin' => v::notEmpty(),
             'first_name' => v::notEmpty()->alpha()->noWhitespace(),
             'last_name' => v::notEmpty()->alpha()->noWhitespace(),
-            'date_of_birth' => v::notEmpty()->date(),
+            'date_of_birth' => v::notEmpty()->date()->age(18),
             'email' => v::notEmpty()->noWhitespace()->email()->emailAvaliable(),
             'password' => v::notEmpty()->noWhitespace(),
         ]);
@@ -83,7 +83,7 @@ class AuthController extends Controller
 
         $authentication = (object) $this->Auth->login($request->getParam('email'), $request->getParam('password'));
 
-        if (!$authentication->error) {
+        if ($authentication->error) {
 
             if ($request->isXhr()) {
                 return $response->withJson($authentication);
