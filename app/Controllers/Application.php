@@ -172,7 +172,8 @@ class Application extends Controller
             return $response->withRedirect($this->router->pathFor('app.vote'));
         }
         
-        $userCanVote = Vote::where('user_id', $_SESSION['userId'])->where('position_id', $request->getParam('position_id'))->get()->count() === 0;
+        $userCanVote = Vote::where('user_id', $_SESSION['userId'])->where('position_id', $request->getParam('position_id'))->where('candidate_id', $request->getParam('candidate_id'))->get()->count() === 0;
+        
 
         if(!$userCanVote) {
             if($request->isXhr()) {
@@ -187,6 +188,28 @@ class Application extends Controller
 
             $this->flash->addMessage('message', [
                 'vote' => 'Sorry but you can only vote onces'
+            ]);
+            return $response->withRedirect($this->router->pathFor('app.vote'));
+        }
+
+        $vote = Vote::where('user_id', $_SESSION['userId'])->where('position_id', $request->getParam('position_id'));
+        $userHasVoted = $vote->count() === 1;
+
+        if($userHasVoted) {
+            $vote->update(['candidate_id' => $request->getParam('candidate_id')]);
+
+            if($request->isXhr()) {
+
+                return $response->withJson([
+                    'error' => false,
+                    'title' => 'Request Completed',
+                    'message' => 'Your vote has been updated'
+                ]);
+                
+            }
+    
+            $this->flash->addMessage('message', [
+                'vote' => 'Your vote has been updated'
             ]);
             return $response->withRedirect($this->router->pathFor('app.vote'));
         }
