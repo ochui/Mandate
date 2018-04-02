@@ -23,6 +23,8 @@ $app->post('/apply/candidate', 'Application:candidateApplication');
 $app->post('/candidate', 'Application:voteCandidate');
 $app->get('/candidate[/{position}]', 'UserInterface:showCandidate')->setName('app.show.candidate');
 
+$app->get('/results', 'UserInterface:showResults')->setName('app.show.result');
+
 $app->get('/admin', 'Admin:index')->setName('admin.home');
 
 $app->get('/admin/users', 'Admin:viewAllUser')->setName('admin.view.users');

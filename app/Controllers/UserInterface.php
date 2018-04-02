@@ -6,6 +6,7 @@ use App\Auth\Auth;
 use App\Models\Candidate;
 use App\Models\Poll;
 use App\Models\Position;
+use App\Models\Vote;
 use \App\Controllers\Controller;
 
 class UserInterface extends Controller
@@ -73,16 +74,16 @@ class UserInterface extends Controller
 
     public function showCandidate($request, $response)
     {
-        
+
         $route = $request->getAttribute('route');
         $arguments = $route->getArguments();
 
         $position = Position::all();
-        
-        if(!count($arguments)) {
+
+        if (!count($arguments)) {
 
             $this->view->getEnvironment()->addGlobal('data', [
-                'positions' => $position
+                'positions' => $position,
             ]);
 
             return $this->view->render($response, 'candidate.html');
@@ -90,10 +91,10 @@ class UserInterface extends Controller
 
         $position = Position::where('name', trim($arguments['position']))->get();
 
-        if(!count($position)) {
+        if (!count($position)) {
 
             $this->view->getEnvironment()->addGlobal('data', [
-                'positions' => $position
+                'positions' => $position,
             ]);
 
             return $this->view->render($response, 'candidate.html');
@@ -101,10 +102,10 @@ class UserInterface extends Controller
 
         $data = Candidate::where('approved', 1)->where('position_id', $position[0]->id)->get();
         $candidates = [];
-        foreach($data as $candidate) {
+        foreach ($data as $candidate) {
             array_push($candidates, [
                 'user' => Candidate::find($candidate->id)->user,
-                'candidate' => $candidate
+                'candidate' => $candidate,
             ]);
         }
 
@@ -114,5 +115,36 @@ class UserInterface extends Controller
         ]);
 
         return $this->view->render($response, 'candidate.html');
+    }
+
+    public function showResults($request, $response)
+    {
+        $positions = Position::all();
+        $results = [];
+        foreach ($positions as $position) {
+            $positionId = $position->id;
+            $votes = Vote::where('position_id', $positionId)->get();
+            $voteResult = [];
+            $proccessed = [];
+
+            foreach ($votes as $vote) {
+                $candidateVote = Vote::where('position_id', $positionId)->where('candidate_id', $vote->candidate_id)->get();
+                if (in_array($vote->candidate_id, $proccessed)) {
+                    continue;
+                }
+                array_push($proccessed, $vote->candidate_id);
+                array_push($voteResult, [
+                    'user' => $vote->candidate_id,
+                    'count' => $candidateVote->count(),
+                    'position' => $position->name
+                ]);
+
+            }
+
+            array_push($results, $voteResult);
+
+        }
+        $this->view->getEnvironment()->addGlobal('results', $results);
+        return $this->view->render($response, 'results.html');
     }
 }
