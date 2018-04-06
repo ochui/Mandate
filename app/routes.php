@@ -37,5 +37,9 @@ $app->get('/admin/view/election', 'Admin:browsePoll')->setName('admin.view.poll'
 
 $app->get('/admin/result[/{position}]', 'Admin:showResult')->setName('admin.view.result');
 
+$app->get('/admin/create/position', 'Admin:getPositionForm')->setName('admin.create.position');
+$app->post('/admin/create/position', 'Admin:addPosition');
+$app->get('/admin/view/position', 'Admin:browsePositions')->setName('admin.view.position');
+
 
 

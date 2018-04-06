@@ -92,7 +92,7 @@ class UserInterface extends Controller
         $position = Position::where('name', trim($arguments['position']))->get();
 
         if (!count($position)) {
-
+            $position = Position::all();
             $this->view->getEnvironment()->addGlobal('data', [
                 'positions' => $position,
             ]);
@@ -111,7 +111,7 @@ class UserInterface extends Controller
 
         $this->view->getEnvironment()->addGlobal('data', [
             'candidates' => $candidates,
-            //'positions' => $position
+            'position' => $position
         ]);
 
         return $this->view->render($response, 'candidate.html');

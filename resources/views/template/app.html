@@ -74,11 +74,14 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="smoth-scroll" href="{{ path_for('app.show.candidate') }}">Candidate</a>
+                                                <a class="smoth-scroll" href="{{ path_for('app.show.candidate') }}">Vote</a>
                                             </li>
                                             {% if auth.userIsAuthenticated %}
                                                 <li>
-                                                    <a class="smoth-scroll" href="{{ path_for('user.apply.candidate') }}">Apply to be voted</a>
+                                                    <a class="smoth-scroll" href="{{ path_for('user.apply.candidate') }}">Enroll</a>
+                                                </li>
+                                                <li>
+                                                    <a class="smoth-scroll" href="{{ path_for('app.show.result') }}">Results</a>
                                                 </li>
                                                 <li>
                                                     <a class="smoth-scroll" href="{{ path_for('auth.signout') }}">Signout</a>

@@ -214,4 +214,56 @@ class Admin extends Controller
 
         return $this->view->render($response, 'admin/showResult.html');
     }
+
+    public function getPositionForm($request, $response)
+    {
+        if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
+       
+        $polls = Poll::where('active', 1)->get();
+        $this->view->getEnvironment()->addGlobal('data', [
+            'polls' => $polls
+        ]);
+
+
+        return $this->view->render($response, 'admin/addPosition.html');
+    }
+
+    public function addPosition($request, $response)
+    {
+        $validation = $this->validator->validate($request, [
+            'name' => v::notEmpty(),
+            'description' => v::notEmpty(),
+            'poll' => v::notEmpty(),
+        ]);
+
+        if ($validation->failed()) {
+            return $response->withRedirect($this->router->pathFor('admin.create.position'));
+        }
+
+        Position::create([
+            'name' => $request->getParam('name'),
+            'description' => $request->getParam('description'),
+            'poll_id' => $request->getParam('poll')
+        ]);
+
+        return $response->withRedirect($this->router->pathFor('admin.view.position'));
+
+    }
+
+    public function browsePositions($request, $response)
+    {
+
+        if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
+
+        $positions = Position::all();
+
+        $this->view->getEnvironment()->addGlobal('positions', $positions);
+
+        return $this->view->render($response, 'admin/browsePosition.html');
+
+    }
 }
