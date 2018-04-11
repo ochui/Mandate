@@ -43,7 +43,7 @@
                                         <td>{{ candidate.user.surname }}</td>
                                         <td>{{ candidate.user.first_name }}</td>
                                         <td>{{ candidate.user.last_name }}</td>
-                                        <td>{{ candidate.candidate.position_id }}</td>
+                                        <td>{{ candidate.candidate.position_id | positionname }}</td>
                                         <td id="status{{ candidate.candidate.user_id }}">
                                             {% if candidate.candidate.approved == 0 %}
                                                 Pending
