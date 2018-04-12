@@ -61,8 +61,15 @@ class AuthController extends Controller
         $user->voter_id = $voteId;
         $user->active = 1;
         $user->save();
+        
+        #$this->view->getEnvironment()->addGlobal('user', $user);
+        $this->flash->addMessage('user', [
+            'email' => $user->email,
+            'voter_id' => $user->voter_id,
+            'name' => $user->surname.' '.$user->first_name
+        ]);
 
-        return $response->withRedirect($this->router->pathFor('auth.signin'));
+        return $response->withRedirect($this->router->pathFor('auth.validate.success'));
         #return $response->withRedirect($this->router->pathFor('auth.validation.instruction'));
     }
 
