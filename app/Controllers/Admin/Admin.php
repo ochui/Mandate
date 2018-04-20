@@ -220,12 +220,11 @@ class Admin extends Controller
         if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
             return $response->withRedirect($this->router->pathFor('auth.signin'));
         }
-       
+
         $polls = Poll::where('active', 1)->get();
         $this->view->getEnvironment()->addGlobal('data', [
-            'polls' => $polls
+            'polls' => $polls,
         ]);
-
 
         return $this->view->render($response, 'admin/addPosition.html');
     }
@@ -245,7 +244,7 @@ class Admin extends Controller
         Position::create([
             'name' => $request->getParam('name'),
             'description' => $request->getParam('description'),
-            'poll_id' => $request->getParam('poll')
+            'poll_id' => $request->getParam('poll'),
         ]);
 
         return $response->withRedirect($this->router->pathFor('admin.view.position'));
@@ -264,6 +263,49 @@ class Admin extends Controller
         $this->view->getEnvironment()->addGlobal('positions', $positions);
 
         return $this->view->render($response, 'admin/browsePosition.html');
+
+    }
+
+    public function publishResult($request, $response)
+    {
+        if (!Auth::userIsAuthenticated() || !$_SESSION['canManage']) {
+            return $response->withRedirect($this->router->pathFor('auth.signin'));
+        }
+
+
+        // $route = $request->getAttribute('route');
+        // $arguments = $route->getArguments();
+
+        // $pollName = $arguments['poll'];
+        $pollName = $request->getParam('poll');
+
+        if (!$pollName) {
+            return $response->withJson([
+                'error' => true,
+                'title' => 'Request Failed',
+                'message' => 'Invalid election id',
+            ]);
+        }
+
+        $poll = Poll::where('id', $pollName);
+
+        if (!count($poll)) {
+            return $response->withJson([
+                'error' => true,
+                'title' => 'Request Failed',
+                'message' => 'Invalid election id',
+            ]);
+        }
+
+        $poll->update(['show_result' => 1]);
+
+        return $response->withJson([
+            'error' => false,
+            'title' => 'Request Completed',
+            'message' => 'Result has been published',
+            'element' => $request->getParam('poll'),
+            'text' => 'Published'
+        ]);
 
     }
 }

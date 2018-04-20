@@ -32,18 +32,28 @@
                                     <th>Description</th>
                                     <th>Start</th>
                                     <th>End</th>
+                                    <th>Result Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for poll in polls %}
-                                    <tr>
+                                    <tr class="pollpanel{{ poll.id }}">
                                         <td>{{ poll.name }}</td>
                                         <td>{{ poll.description }}</td>
                                         <td>{{ poll.starts }}</td>
                                         <td>{{ poll.ends }}</td>
+                                        <td id="status{{ poll.id }}">
+                                            {% if poll.show_result == 0 %}
+                                                Pending
+                                            {% endif %}
+                                            {% if poll.show_result == 1 %}
+                                                Published
+                                            {% endif %}
+                                        </td>
                                         <td>
-                                            <button disabled="disabled"></button>
+                                                <input type="hidden" name="poll" value="{{ poll.id }}" id="poll{{ poll.id }}">
+                                            <button class="btn btn-primary" onclick="processRequest('{{ poll.id }}')">Publish Result</button>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -54,7 +64,8 @@
                                     <th>Description</th>
                                     <th>Start</th>
                                     <th>End</th>
-                                    <th>Status</th>
+                                    <th>Result Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -99,5 +110,71 @@
                 "bAutoWidth": false
             });
         });
+
+        function processRequest(pollId, accept) {
+            swal({
+                title: "Are you sure?",
+                text: "You are about to publish result",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Continue",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    var data = $('#poll' + pollId + '').serialize();
+                    if (accept) {
+                        data = data + '&accept=true'
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: '/admin/publish',
+                        data: data,
+                        dataType: 'json',
+                        beforeSend: function () {
+                            console.log(data)
+                            $('.pollpanel' + pollId + '').block({
+                                message: '<h4>Just a moment...</h4>',
+                                css: {
+                                    border: '1px solid #fff'
+                                }
+                            });
+                        },
+                        success: function (response) {
+                            //var response = JSON.parse(JSON.stringify(response))
+
+                            $('.pollpanel' + pollId + '').unblock();
+
+                            swal({
+                                title: response.title,
+                                text: response.message,
+                                type: response.error ? 'error': 'success',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Close'
+                            })
+
+                            $('#status' + response.element + '').html(response.text)
+                        },
+                        error: function (response) {
+                            console.log(response)
+                            $('.pollpanel' + pollId + '').unblock();
+                            swal({
+                                title: response.statusText,
+                                text: response.responseText + ' Please Refresh these page and try again',
+                                type: 'error',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Close'
+                            })
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "operation terminated", "error");
+                }
+            });
+        }
     </script>
 {% endblock %}

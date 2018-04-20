@@ -41,5 +41,7 @@ $app->get('/admin/create/position', 'Admin:getPositionForm')->setName('admin.cre
 $app->post('/admin/create/position', 'Admin:addPosition');
 $app->get('/admin/view/position', 'Admin:browsePositions')->setName('admin.view.position');
 
+$app->post('/admin/publish[/{poll}]', 'Admin:publishResult');
+
 
 
