@@ -6,7 +6,7 @@ use App\Auth\Auth;
 use App\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Poll;
-use App\MOdels\Position;
+use App\Models\Position;
 use App\Models\User;
 use App\Models\Vote;
 use Psr\Http\Message\ResponseInterface as Response;
