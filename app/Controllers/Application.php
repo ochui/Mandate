@@ -30,12 +30,12 @@ class Application extends Controller
                 return $response->withJson([
                     'error' => true,
                     'title' => 'Invalid User',
-                    'message' => 'An error occur will trying to verry your identity, make sure you are sign in befor performing this operation',
+                    'message' => 'An error occur will trying to verify your identity, make sure you are sign in befor performing this operation',
                 ]);
             }
 
             $this->flash->addMessage('error', [
-                'application' => 'An error occur will trying to verry your identity, make sure you are sign in befor performing this operation',
+                'application' => 'An error occur will trying to  your identity, make sure you are sign in befor performing this operation',
             ]);
             return $response->withRedirect($this->router->pathFor('user.apply.vote'));
         }
@@ -75,6 +75,19 @@ class Application extends Controller
             return $response->withRedirect($this->router->pathFor('user.apply.candidate'));
         }
 
+        #get active election
+        $poll = Poll::where('active', 1)->get();
+        $currentTime = new \Datetime('now');
+
+        $electionIsOpen = v::date()->between($poll[0]->starts, $poll[0]->ends)->validate('now'); // true
+
+        if (!$electionIsOpen) {
+            return $response->withJson([
+                'error' => true,
+                'title' => 'Request Failed',
+                'message' => 'Sorry, applications are closed at this time',
+            ]);
+        }
         $candidate = Candidate::where('user_id', $_SESSION['userId'])->get();
 
         // print_r($candidate);
@@ -161,7 +174,7 @@ class Application extends Controller
             return $response->withJson([
                 'error' => true,
                 'title' => 'Request Failed',
-                'message' => 'Sorry, but you can\'t vote at this time'  ,
+                'message' => 'Sorry, but you can\'t vote at this time',
             ]);
         }
 
@@ -230,7 +243,7 @@ class Application extends Controller
             'user_id' => $_SESSION['userId'],
             'candidate_id' => $request->getParam('candidate_id'),
             'position_id' => $request->getParam('position_id'),
-            'poll_id' => $request->getParam('poll_id'),
+            'poll_id' => $request->getParam('electionId'),
         ]);
 
         if ($request->isXhr()) {

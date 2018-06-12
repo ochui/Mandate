@@ -122,11 +122,26 @@ class Admin extends Controller
             return $response->withRedirect($this->router->pathFor('admin.create.poll'));
         }
 
+        $activeElection = Poll::where('active', 1)->get();
+        if (count($activeElection)) {
+            if ($request->isXhr()) {
+                return $response->withJson([
+                    'error' => false,
+                    'title' => 'Request Failed',
+                    'message' => 'You can not have more than one active election at a time',
+                ]);
+            }
+
+            $this->flash->addMessage('error', 'You can not have more than one active election at a time');
+            return $response->withRedirect($this->router->pathFor('admin.create.poll'));
+        }
+
         Poll::create([
             'name' => $request->getParam('name'),
             'description' => $request->getParam('description'),
-            'starts' => $request->getParam('starts'),
+            'starts' => $request->getParam('start'),
             'ends' => $request->getParam('end'),
+            'active' =>  1,
         ]);
 
         return $response->withRedirect($this->router->pathFor('admin.view.poll'));
@@ -272,7 +287,6 @@ class Admin extends Controller
             return $response->withRedirect($this->router->pathFor('auth.signin'));
         }
 
-
         // $route = $request->getAttribute('route');
         // $arguments = $route->getArguments();
 
@@ -297,14 +311,17 @@ class Admin extends Controller
             ]);
         }
 
-        $poll->update(['show_result' => 1]);
+        $poll->update([
+            'show_result' => 1,
+            'archive' => 1,
+            ]);
 
         return $response->withJson([
             'error' => false,
             'title' => 'Request Completed',
             'message' => 'Result has been published',
             'element' => $request->getParam('poll'),
-            'text' => 'Published'
+            'text' => 'Published',
         ]);
 
     }

@@ -62,7 +62,11 @@ class UserInterface extends Controller
     public function applyToBeVoted($request, $response)
     {
         $polls = Poll::where('active', 1)->get();
-        $position = Position::all();
+
+        if (!count($polls)) {
+            return $this->view->render($response, 'applyToBeVoted.html');
+        }
+        $position = @Position::where('poll_id', $polls[0]->id)->get();
 
         $this->view->getEnvironment()->addGlobal('data', [
             'polls' => $polls,
@@ -75,10 +79,16 @@ class UserInterface extends Controller
     public function showCandidate($request, $response)
     {
 
+        $election = Poll::where('active', 1)->get();
+
+        if (!count($election)) {
+            return $this->view->render($response, 'candidate.html');
+        }
+
         $route = $request->getAttribute('route');
         $arguments = $route->getArguments();
 
-        $position = Position::all();
+        $position = Position::where('poll_id', $election[0]->id)->get();
 
         if (!count($arguments)) {
 
@@ -89,7 +99,7 @@ class UserInterface extends Controller
             return $this->view->render($response, 'candidate.html');
         }
 
-        $position = Position::where('name', trim($arguments['position']))->get();
+        $position = Position::where('name', trim($arguments['position']))->where('poll_id', $election[0]->id)->get();
 
         if (!count($position)) {
             $position = Position::all();
@@ -111,7 +121,8 @@ class UserInterface extends Controller
 
         $this->view->getEnvironment()->addGlobal('data', [
             'candidates' => $candidates,
-            'position' => $position
+            'position' => $position,
+            #'electionId' => Poll::where('active', 1)->get()[0]->id,
         ]);
 
         return $this->view->render($response, 'candidate.html');
@@ -119,8 +130,19 @@ class UserInterface extends Controller
 
     public function showResults($request, $response)
     {
-        $positions = Position::all();
+        $election = Poll::where('active', 1)->get();
+
+        if (!$election[0]->show_result) {
+            return $this->view->render($response, 'results.html');
+        }
         $results = [];
+
+        if (!count($election)) {
+            return $this->view->render($response, 'results.html');
+        }
+
+        $positions = Position::where('poll_id', $election[0]->id)->get();
+
         foreach ($positions as $position) {
             $positionId = $position->id;
             $votes = Vote::where('position_id', $positionId)->get();
@@ -136,7 +158,7 @@ class UserInterface extends Controller
                 array_push($voteResult, [
                     'user' => $vote->candidate_id,
                     'count' => $candidateVote->count(),
-                    'position' => $position->name
+                    'position' => $position->name,
                 ]);
 
             }

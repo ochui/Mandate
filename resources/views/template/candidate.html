@@ -43,6 +43,7 @@
                             <form action="" id="candidate{{ candidate.candidate.id }}" method="POST">
                                 <input type="hidden" name="candidate_id" value="{{ candidate.candidate.id }}">
                                 <input type="hidden" name="position_id" value="{{ candidate.candidate.position_id }}">
+                                <input type="hidden" name="electionId" value="{{ data.electionId }}">
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <input type="password" id="voter_id_{{ candidate.candidate.id }}" name="pin" class="form-control" placeholder="Enter Your Pin">
