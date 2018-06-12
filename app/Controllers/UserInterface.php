@@ -12,11 +12,21 @@ use \App\Controllers\Controller;
 class UserInterface extends Controller
 {
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function index($request, $response)
     {
         return $this->view->render($response, 'home.html');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function signup($request, $response)
     {
         if (Auth::userIsAuthenticated()) {
@@ -26,6 +36,11 @@ class UserInterface extends Controller
         return $this->view->render($response, 'auth/signup.html');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function signin($request, $response)
     {
         if (Auth::userIsAuthenticated()) {
@@ -35,6 +50,11 @@ class UserInterface extends Controller
         return $this->view->render($response, 'auth/signin.html');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function validationInstruction($request, $response)
     {
         if (Auth::userIsAuthenticated()) {
@@ -44,21 +64,41 @@ class UserInterface extends Controller
         return $this->view->render($response, 'auth/validationInstruction.html');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function validationError($request, $response)
     {
         return $this->view->render($response, 'auth/validationError.html');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function validationSuccess($request, $response)
     {
         return $this->view->render($response, 'auth/validationSuccess.html');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function applyToVote($request, $response)
     {
         return $this->view->render($response, 'applyToVote.html');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function applyToBeVoted($request, $response)
     {
         $polls = Poll::where('active', 1)->get();
@@ -76,6 +116,11 @@ class UserInterface extends Controller
         return $this->view->render($response, 'applyToBeVoted.html');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function showCandidate($request, $response)
     {
 
@@ -128,6 +173,11 @@ class UserInterface extends Controller
         return $this->view->render($response, 'candidate.html');
     }
 
+    /**
+     * @param $request
+     * @param $response
+     * @return mixed
+     */
     public function showResults($request, $response)
     {
         $election = Poll::where('active', 1)->get();

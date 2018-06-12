@@ -1,5 +1,6 @@
 .vscode/
 .komodoproject
+.idea
 
 /vendor
 /uploads
