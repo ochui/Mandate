@@ -14,7 +14,7 @@ class Vote extends Model
         'user_id',
         'candidate_id',
         'position_id',
-        'poll'
+        'poll_id'
     ];
 
     protected $gaurded = [

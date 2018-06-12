@@ -167,7 +167,7 @@ class UserInterface extends Controller
         $this->view->getEnvironment()->addGlobal('data', [
             'candidates' => $candidates,
             'position' => $position,
-            #'electionId' => Poll::where('active', 1)->get()[0]->id,
+            'electionId' => Poll::where('active', 1)->get()[0]->id,
         ]);
 
         return $this->view->render($response, 'candidate.html');
@@ -182,7 +182,7 @@ class UserInterface extends Controller
     {
         $election = Poll::where('active', 1)->get();
 
-        if (!$election[0]->show_result) {
+        if (!@$election[0]->show_result) {
             return $this->view->render($response, 'results.html');
         }
         $results = [];
@@ -197,14 +197,14 @@ class UserInterface extends Controller
             $positionId = $position->id;
             $votes = Vote::where('position_id', $positionId)->get();
             $voteResult = [];
-            $proccessed = [];
+            $processed = [];
 
             foreach ($votes as $vote) {
                 $candidateVote = Vote::where('position_id', $positionId)->where('candidate_id', $vote->candidate_id)->get();
-                if (in_array($vote->candidate_id, $proccessed)) {
+                if (in_array($vote->candidate_id, $processed)) {
                     continue;
                 }
-                array_push($proccessed, $vote->candidate_id);
+                array_push($processed, $vote->candidate_id);
                 array_push($voteResult, [
                     'user' => $vote->candidate_id,
                     'count' => $candidateVote->count(),

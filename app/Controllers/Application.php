@@ -239,11 +239,12 @@ class Application extends Controller
             return $response->withRedirect($this->router->pathFor('app.vote'));
         }
 
+
         Vote::create([
+            'poll_id' => $request->getParam('election_id'),
             'user_id' => $_SESSION['userId'],
             'candidate_id' => $request->getParam('candidate_id'),
             'position_id' => $request->getParam('position_id'),
-            'poll_id' => $request->getParam('electionId'),
         ]);
 
         if ($request->isXhr()) {
