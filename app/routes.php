@@ -23,7 +23,9 @@ $app->post('/apply/candidate', 'Application:candidateApplication');
 $app->post('/candidate', 'Application:voteCandidate');
 $app->get('/candidate[/{position}]', 'UserInterface:showCandidate')->setName('app.show.candidate');
 
-$app->get('/results', 'UserInterface:showResults')->setName('app.show.result');
+$app->get('/results[/{electionId}]', 'UserInterface:showResults')->setName('app.show.result');
+
+$app->get('/archives', 'UserInterface:showArchive')->setName('app.show.archives');
 
 $app->get('/admin', 'Admin:index')->setName('admin.home');
 

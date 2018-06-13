@@ -181,17 +181,30 @@ class UserInterface extends Controller
     public function showResults($request, $response)
     {
         $election = Poll::where('active', 1)->get();
+        $route = $request->getAttribute('route');
+        $arguments = $route->getArguments();
 
-        if (!@$election[0]->show_result) {
-            return $this->view->render($response, 'results.html');
+        $electionId = trim($arguments['electionId']);
+        if($electionId) {
+            goto getResults;
         }
-        $results = [];
 
         if (!count($election)) {
+
             return $this->view->render($response, 'results.html');
         }
 
-        $positions = Position::where('poll_id', $election[0]->id)->get();
+        if (!@$election[0]->show_result) {
+
+            return $this->view->render($response, 'results.html');
+        }
+
+        $electionId = $election[0]->id;
+
+
+        getResults:
+        $results = [];
+        $positions = Position::where('poll_id', $electionId)->get();
 
         foreach ($positions as $position) {
             $positionId = $position->id;
@@ -218,5 +231,13 @@ class UserInterface extends Controller
         }
         $this->view->getEnvironment()->addGlobal('results', $results);
         return $this->view->render($response, 'results.html');
+    }
+
+    public function showArchive($request, $response)
+    {
+        $archive = Poll::where('active', 0)->where('archive', 1)->get();
+        $this->view->getEnvironment()->addGlobal('archives', $archive);
+
+        return $this->view->render($response, 'archive.html');
     }
 }

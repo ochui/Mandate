@@ -45,15 +45,22 @@
                                         <td>{{ poll.ends }}</td>
                                         <td id="status{{ poll.id }}">
                                             {% if poll.show_result == 0 %}
-                                                Pending
+                                            <span>Pending</span>
                                             {% endif %}
                                             {% if poll.show_result == 1 %}
-                                                Published
+                                                {% if poll.archive %}
+                                                <span style="color: red">Published <b>Archive</b></span>
+                                                {% else %}
+                                            Published
+                                                {% endif %}
                                             {% endif %}
                                         </td>
                                         <td>
-                                                <input type="hidden" name="poll" value="{{ poll.id }}" id="poll{{ poll.id }}">
-                                            <button class="btn btn-primary" onclick="processRequest('{{ poll.id }}')">Publish Result</button>
+                                            <input type="hidden" name="poll" value="{{ poll.id }}" id="poll{{ poll.id }}">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary" id="pub{{ poll.id }}" onclick="processRequest('{{ poll.id }}')" {% if poll.show_result %} disabled {% endif %}}>Publish</button>
+                                                <button type="button" class="btn btn-danger" id="arc{{ poll.id }}" onclick="processRequest('{{ poll.id }}', true)" {% if poll.archive %} disabled {% endif %}}>Archive</button>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -111,10 +118,10 @@
             });
         });
 
-        function processRequest(pollId, accept) {
+        function processRequest(pollId, archive) {
             swal({
                 title: "Are you sure?",
-                text: "You are about to publish result",
+                text: archive ? "You are about to archive an election" :"You are about to publish result",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -125,8 +132,8 @@
             }, function (isConfirm) {
                 if (isConfirm) {
                     var data = $('#poll' + pollId + '').serialize();
-                    if (accept) {
-                        data = data + '&accept=true'
+                    if (archive) {
+                        data = data + '&archive=true'
                     }
                     $.ajax({
                         type: 'POST',

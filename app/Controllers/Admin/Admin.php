@@ -311,9 +311,23 @@ class Admin extends Controller
             ]);
         }
 
+        if($request->getParam('archive') == true) {
+            $poll->update([
+                'show_result' => 1,
+                'archive' => 1,
+            ]);
+
+            return $response->withJson([
+                'error' => false,
+                'title' => 'Request Completed',
+                'message' => 'Election archived',
+                'element' => $request->getParam('poll'),
+                'text' => 'Published',
+            ]);
+        }
+
         $poll->update([
             'show_result' => 1,
-            'archive' => 1,
             ]);
 
         return $response->withJson([
