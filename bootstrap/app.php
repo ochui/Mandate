@@ -14,14 +14,14 @@ $app = new \Slim\App($configurations);
 $container = $app->getContainer();
 
 #require eloquent
-require __DIR__.'./dependencies/eloquent.php';
+require __DIR__.'/dependencies/eloquent.php';
 #require respect validation
-require __DIR__.'./dependencies/respectValidation.php';
+require __DIR__.'/dependencies/respectValidation.php';
 
 #require container
-require __DIR__.'./container/container.php';
+require __DIR__.'/container/container.php';
 
 #require middleware
-require __DIR__.'./configurations/middleware.php';
+require __DIR__.'/configurations/middleware.php';
 
 require './app/routes.php';
